@@ -1,0 +1,24 @@
+dropped_correlated_feature
+Total Backward Packets
+Total Length of Bwd Packets
+Bwd Packet Length Std
+Fwd IAT Total
+Fwd IAT Max
+Fwd Header Length
+Bwd Header Length
+Packet Length Std
+SYN Flag Count
+CWE Flag Count
+ECE Flag Count
+Average Packet Size
+Avg Fwd Segment Size
+Avg Bwd Segment Size
+Fwd Header Length.1
+Subflow Fwd Packets
+Subflow Fwd Bytes
+Subflow Bwd Packets
+Subflow Bwd Bytes
+act_data_pkt_fwd
+Idle Mean
+Idle Max
+Idle Min

@@ -1,0 +1,48 @@
+{
+  "accuracy": 0.9987075621490149,
+  "class_order": [
+    "NORMAL",
+    "MALICIOUS"
+  ],
+  "classification_report": {
+    "MALICIOUS": {
+      "f1-score": 0.9961719566468219,
+      "precision": 0.9963474502619031,
+      "recall": 0.9959965248426786,
+      "support": 85176.0
+    },
+    "NORMAL": {
+      "f1-score": 0.9992225359636738,
+      "precision": 0.9991867921693571,
+      "recall": 0.9992582823153994,
+      "support": 419297.0
+    },
+    "accuracy": 0.9987075621490149,
+    "macro avg": {
+      "f1-score": 0.9976972463052478,
+      "precision": 0.99776712121563,
+      "recall": 0.997627403579039,
+      "support": 504473.0
+    },
+    "weighted avg": {
+      "f1-score": 0.9987074714430906,
+      "precision": 0.9987073932990325,
+      "recall": 0.9987075621490149,
+      "support": 504473.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      418986,
+      311
+    ],
+    [
+      341,
+      84835
+    ]
+  ],
+  "f1_score": 0.9961719566468219,
+  "positive_class": "MALICIOUS",
+  "precision": 0.9963474502619031,
+  "recall": 0.9959965248426786
+}

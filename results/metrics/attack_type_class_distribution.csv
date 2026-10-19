@@ -1,0 +1,15 @@
+_original_attack_label,records
+Bot,1953
+DDoS,128016
+DoS GoldenEye,10286
+DoS Hulk,172849
+DoS Slowhttptest,5228
+DoS slowloris,5385
+FTP-Patator,5933
+Heartbleed,11
+Infiltration,36
+PortScan,90819
+SSH-Patator,3219
+Web Attack � Brute Force,1470
+Web Attack � Sql Injection,21
+Web Attack � XSS,652

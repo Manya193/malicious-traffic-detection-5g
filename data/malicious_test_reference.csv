@@ -1,0 +1,21 @@
+test_row_id,original_cicids2017_label
+1,DDoS
+2,DDoS
+3,PortScan
+4,PortScan
+5,Bot
+6,Bot
+7,Infiltration
+8,Infiltration
+9,FTP-Patator
+10,FTP-Patator
+11,SSH-Patator
+12,SSH-Patator
+13,DoS slowloris
+14,DoS slowloris
+15,DoS Slowhttptest
+16,DoS Slowhttptest
+17,DoS Hulk
+18,DoS Hulk
+19,DoS GoldenEye
+20,DoS GoldenEye

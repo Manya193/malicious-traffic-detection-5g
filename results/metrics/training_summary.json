@@ -1,0 +1,211 @@
+{
+  "cleaning_report": {
+    "binary_label_distribution": {
+      "MALICIOUS": 425878,
+      "NORMAL": 2096484
+    },
+    "columns_after": 79,
+    "columns_before": 79,
+    "duplicates_removed": 308381,
+    "empty_rows_removed": 0,
+    "infinity_values_replaced": 2775,
+    "missing_values_after": 3128,
+    "missing_values_before": 1358,
+    "original_label_distribution": {
+      "BENIGN": 2273097,
+      "Bot": 1966,
+      "DDoS": 128027,
+      "DoS GoldenEye": 10293,
+      "DoS Hulk": 231073,
+      "DoS Slowhttptest": 5499,
+      "DoS slowloris": 5796,
+      "FTP-Patator": 7938,
+      "Heartbleed": 11,
+      "Infiltration": 36,
+      "PortScan": 158930,
+      "SSH-Patator": 5897,
+      "Web Attack \ufffd Brute Force": 1507,
+      "Web Attack \ufffd Sql Injection": 21,
+      "Web Attack \ufffd XSS": 652
+    },
+    "rows_after": 2522362,
+    "rows_before": 2830743,
+    "rows_removed_missing_label": 0
+  },
+  "columns_after_preprocessing": 79,
+  "dataset_files": [
+    "data\\raw\\MachineLearningCSV\\MachineLearningCVE\\Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
+    "data\\raw\\MachineLearningCSV\\MachineLearningCVE\\Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+    "data\\raw\\MachineLearningCSV\\MachineLearningCVE\\Friday-WorkingHours-Morning.pcap_ISCX.csv",
+    "data\\raw\\MachineLearningCSV\\MachineLearningCVE\\Monday-WorkingHours.pcap_ISCX.csv",
+    "data\\raw\\MachineLearningCSV\\MachineLearningCVE\\Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+    "data\\raw\\MachineLearningCSV\\MachineLearningCVE\\Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv",
+    "data\\raw\\MachineLearningCSV\\MachineLearningCVE\\Tuesday-WorkingHours.pcap_ISCX.csv",
+    "data\\raw\\MachineLearningCSV\\MachineLearningCVE\\Wednesday-workingHours.pcap_ISCX.csv"
+  ],
+  "feature_selection": {
+    "correlation_threshold": 0.98,
+    "sample_class_distribution": {
+      "MALICIOUS": 25326,
+      "NORMAL": 124674
+    },
+    "sample_size": 150000,
+    "sample_source": "training split only"
+  },
+  "metrics": {
+    "accuracy": 0.9987075621490149,
+    "class_order": [
+      "NORMAL",
+      "MALICIOUS"
+    ],
+    "classification_report": {
+      "MALICIOUS": {
+        "f1-score": 0.9961719566468219,
+        "precision": 0.9963474502619031,
+        "recall": 0.9959965248426786,
+        "support": 85176.0
+      },
+      "NORMAL": {
+        "f1-score": 0.9992225359636738,
+        "precision": 0.9991867921693571,
+        "recall": 0.9992582823153994,
+        "support": 419297.0
+      },
+      "accuracy": 0.9987075621490149,
+      "macro avg": {
+        "f1-score": 0.9976972463052478,
+        "precision": 0.99776712121563,
+        "recall": 0.997627403579039,
+        "support": 504473.0
+      },
+      "weighted avg": {
+        "f1-score": 0.9987074714430906,
+        "precision": 0.9987073932990325,
+        "recall": 0.9987075621490149,
+        "support": 504473.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        418986,
+        311
+      ],
+      [
+        341,
+        84835
+      ]
+    ],
+    "f1_score": 0.9961719566468219,
+    "positive_class": "MALICIOUS",
+    "precision": 0.9963474502619031,
+    "recall": 0.9959965248426786
+  },
+  "model_file": "models\\random_forest_cicids2017.joblib",
+  "random_forest": {
+    "class_weight": "balanced_subsample",
+    "n_estimators": 100,
+    "n_jobs": -1,
+    "random_state": 42
+  },
+  "records_after_preprocessing": 2522362,
+  "records_before_preprocessing": 2830743,
+  "removed_features": [],
+  "selected_feature_count": 30,
+  "selected_features": [
+    "Packet Length Variance",
+    "Bwd Packet Length Mean",
+    "Destination Port",
+    "Packet Length Mean",
+    "Init_Win_bytes_backward",
+    "Bwd Packet Length Max",
+    "Bwd Packet Length Min",
+    "Max Packet Length",
+    "Total Length of Fwd Packets",
+    "Fwd Packet Length Max",
+    "Init_Win_bytes_forward",
+    "Fwd Packet Length Mean",
+    "Min Packet Length",
+    "Total Fwd Packets",
+    "Flow Packets/s",
+    "Flow IAT Std",
+    "Fwd IAT Std",
+    "Flow IAT Max",
+    "Fwd IAT Mean",
+    "Flow IAT Mean",
+    "ACK Flag Count",
+    "PSH Flag Count",
+    "Fwd Packet Length Min",
+    "URG Flag Count",
+    "Fwd IAT Min",
+    "Fwd Packet Length Std",
+    "Bwd Packets/s",
+    "min_seg_size_forward",
+    "Fwd Packets/s",
+    "Flow Duration"
+  ],
+  "testing_samples": 504473,
+  "top_features": [
+    {
+      "feature": "Packet Length Variance",
+      "importance": 0.1503729941810193
+    },
+    {
+      "feature": "Bwd Packet Length Mean",
+      "importance": 0.08141342491459888
+    },
+    {
+      "feature": "Destination Port",
+      "importance": 0.08045234565516904
+    },
+    {
+      "feature": "Max Packet Length",
+      "importance": 0.07642035856761574
+    },
+    {
+      "feature": "Packet Length Mean",
+      "importance": 0.06045837198094531
+    },
+    {
+      "feature": "Bwd Packet Length Max",
+      "importance": 0.05134051632115895
+    },
+    {
+      "feature": "Fwd Packet Length Mean",
+      "importance": 0.042340425912256924
+    },
+    {
+      "feature": "Init_Win_bytes_backward",
+      "importance": 0.042313446932943054
+    },
+    {
+      "feature": "Total Length of Fwd Packets",
+      "importance": 0.03798705076947098
+    },
+    {
+      "feature": "Bwd Packet Length Min",
+      "importance": 0.03790793148878896
+    },
+    {
+      "feature": "Init_Win_bytes_forward",
+      "importance": 0.032783937390270405
+    },
+    {
+      "feature": "Fwd Packet Length Max",
+      "importance": 0.031636899041418996
+    },
+    {
+      "feature": "Fwd IAT Std",
+      "importance": 0.025632299444656767
+    },
+    {
+      "feature": "Total Fwd Packets",
+      "importance": 0.025121595744825653
+    },
+    {
+      "feature": "Min Packet Length",
+      "importance": 0.02448977866678418
+    }
+  ],
+  "training_samples": 2017889,
+  "training_time_seconds": 145.860941299994
+}
