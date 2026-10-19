@@ -1,184 +1,341 @@
 # Malicious Traffic Detection in 5G Using Machine Learning
 
-Two-stage malicious network traffic detection using the official CICIDS2017 dataset and `RandomForestClassifier` models.
+A machine learning-based network intrusion detection project that uses the CICIDS2017 dataset and Random Forest classifiers to identify normal and malicious network traffic, classify detected attacks, and explain predictions through SHAP-based explainable AI.
 
-## Project Facts
+## Project Overview
 
-- Dataset: CICIDS2017
-- Official source: Canadian Institute for Cybersecurity, University of New Brunswick
-- Classification: Two-stage binary plus attack-type identification
-- Classes: `NORMAL`, `MALICIOUS`
-- Label conversion: `BENIGN` -> `NORMAL`; all other labels -> `MALICIOUS`
-- Models: Random Forest only
+The increasing complexity of network traffic creates a need for intelligent intrusion detection systems that can identify potentially malicious activities. This project develops a machine learning pipeline for traffic classification, attack identification, and prediction explainability.
 
-## Dataset Preparation
+The system uses a **two-stage Random Forest classification approach**:
 
-Use the official CIC/UNB dataset page:
+1. **Binary Classification:** Classifies network traffic as `NORMAL` or `MALICIOUS`.
+2. **Attack-Type Classification:** If traffic is classified as malicious, a second Random Forest model predicts its attack category.
+3. **Explainable AI:** Uses SHAP-based explanations to help users understand the features contributing to a prediction.
+4. **Interactive Web Application:** Provides a Streamlit interface for uploading traffic data and viewing predictions.
 
-https://www.unb.ca/cic/datasets/ids-2017.html
 
-The official page states that `MachineLearningCSV.zip` and `GeneratedLabelledFlows.zip` are available for machine learning and labeled-flow research use through the CIC dataset download form.
+## Objectives
 
-Place one of these official archives, or the extracted CSV files, under:
+- Detect malicious network traffic using machine learning.
+- Distinguish normal traffic from malicious traffic.
+- Identify the attack category of traffic classified as malicious.
+- Select relevant features using correlation analysis and Random Forest feature importance.
+- Evaluate the models using standard classification metrics.
+- Provide interpretable predictions through SHAP-based explainability.
+- Develop an interactive application for testing traffic records.
+
+## Technologies Used
+
+| Component | Technology |
+|---|---|
+| Programming language | Python |
+| Dataset | CICIDS2017 |
+| Machine learning | Scikit-learn |
+| Classification algorithm | Random Forest |
+| Data processing | Pandas, NumPy |
+| Visualization | Matplotlib, Seaborn |
+| Explainable AI | SHAP |
+| Web application | Streamlit |
+| Model serialization | Joblib |
+
+## Dataset
+
+The project uses the **CICIDS2017 dataset**, published by the Canadian Institute for Cybersecurity at the University of New Brunswick.
+
+Dataset source: https://www.unb.ca/cic/datasets/ids-2017.html
+
+CICIDS2017 contains labeled network traffic representing benign activity and different types of attacks. Its flow-based features support the development and evaluation of intrusion detection models.
+
+### Label Processing
+
+The original dataset labels are mapped as follows for binary classification:
+
+- `BENIGN` → `NORMAL`
+- All other attack labels → `MALICIOUS`
+
+The original attack labels are retained separately for the second-stage attack-type classifier.
+
+### Dataset Handling
+
+The dataset must be obtained from the official source and placed under `data/raw/` before training.
+
+The raw dataset files are excluded from GitHub to avoid uploading large datasets. The trained model files are included in the repository.
+
+## System Architecture
 
 ```text
-data/raw/
+          CICIDS2017 Dataset
+                   |
+                   v
+          Data Preprocessing
+                   |
+                   v
+          Feature Selection
+       (Correlation + RF Importance)
+                   |
+                   v
+          Binary Random Forest
+                   |
+             +-----+-----+
+             |           |
+             v           v
+          NORMAL      MALICIOUS
+             |           |
+             v           v
+         Safe Traffic   Attack-Type
+                        Random Forest
+                            |
+                            v
+                    Predicted Attack
+                            |
+                            v
+                    SHAP Explanation
+                            |
+                            v
+                   Streamlit Interface
 ```
 
-Preferred file:
+## Methodology
+
+### 1. Data Preprocessing
+
+The preprocessing stage prepares the dataset for model training by handling missing or invalid values, duplicate records, and infinite values where applicable. Labels are standardized, and unsuitable identifier or time-related fields are removed when present.
+
+The dataset is divided into training and testing sets using stratified splitting to preserve class proportions.
+
+### 2. Feature Selection
+
+Feature selection combines two techniques:
+
+- **Correlation analysis:** Identifies highly correlated features to reduce redundancy.
+- **Random Forest feature importance:** Ranks features according to their contribution to classification.
+
+A stratified sample of 150,000 records from the training split is used for feature selection to reduce computation time. The final binary Random Forest model is trained on the full training split using the selected 30 features.
+
+### 3. Binary Classification
+
+The first Random Forest model predicts whether an input traffic record is:
+
+- `NORMAL` — classified as benign traffic.
+- `MALICIOUS` — classified as potentially malicious traffic.
+
+### 4. Attack-Type Classification
+
+Traffic classified as malicious is passed to a separate Random Forest classifier trained on the original attack labels. The model predicts an attack category represented in the training data.
+
+Normal traffic does not receive an attack-type prediction.
+
+### 5. Explainable AI
+
+SHAP-based explanations help interpret individual predictions by showing how input features contribute to the model output.
+
+These explanations support model interpretation; they do not independently establish that a traffic record is malicious or prove the cause of an attack.
+
+### 6. Web Application
+
+The Streamlit application allows users to upload traffic data, view classification results, identify predicted attack categories when applicable, and inspect feature-level explanations.
+
+Input data must contain the feature columns expected by the trained pipeline.
+
+## Model Performance
+
+The following results were obtained from the project's recorded held-out test evaluations.
+
+### Binary Random Forest
+
+| Metric | Score |
+|---|---:|
+| Accuracy | 99.8708% |
+| Precision | 99.6347% |
+| Recall | 99.5996% |
+| F1-score | 99.6172% |
+| Selected features | 30 |
+| Number of trees | 100 |
+
+### Attack-Type Random Forest
+
+| Metric | Score |
+|---|---:|
+| Accuracy | 99.7981% |
+| Weighted precision | 99.7853% |
+| Weighted recall | 99.7981% |
+| Weighted F1-score | 99.7900% |
+| Number of classes | 14 |
+
+*These are experimental results on CICIDS2017. Performance on different network environments or real 5G traffic may differ.*
+
+## Project Structure
 
 ```text
-data/raw/MachineLearningCSV.zip
+Malicious Traffic Detection/
+├── app/
+│   └── streamlit_app.py
+├── data/
+│   ├── raw/
+│   └── processed/
+├── models/
+│   ├── random_forest_cicids2017.joblib
+│   └── random_forest_attack_type.joblib
+├── notebooks/
+├── results/
+│   ├── figures/
+│   ├── metrics/
+│   └── selected_features/
+├── src/
+│   ├── data_loader.py
+│   ├── download_dataset.py
+│   ├── evaluate.py
+│   ├── feature_selection.py
+│   ├── predict.py
+│   ├── preprocessing.py
+│   ├── train.py
+│   ├── train_attack_type.py
+│   ├── utils.py
+│   └── xai.py
+├── .gitignore
+├── README.md
+└── requirements.txt
 ```
 
-Acceptable alternative:
+## Installation and Setup
 
-```text
-data/raw/GeneratedLabelledFlows.zip
-```
+### Prerequisites
 
-The project never creates fake CICIDS2017 records. If no real CSV files are present, training stops with a clear dataset-required message.
+- Python installed on your system.
+- Git, if cloning the repository.
+- The official CICIDS2017 dataset for retraining the models.
 
-## Installation
+### 1. Clone the Repository
 
 ```bash
+git clone https://github.com/USERNAME/malicious-traffic-detection-5g.git
+cd malicious-traffic-detection-5g
+```
+
+Replace `USERNAME` with the GitHub account that hosts the repository.
+
+### 2. Create a Virtual Environment
+
+**Windows PowerShell:**
+
+```powershell
 python -m venv .venv
-.venv\Scripts\activate
-pip install -r requirements.txt
+.venv\Scripts\Activate.ps1
 ```
 
-## Optional Official Download Attempt
+If the virtual environment is already activated, you can skip this step.
+
+### 3. Install Dependencies
 
 ```bash
-python -m src.download_dataset
+python -m pip install -r requirements.txt
 ```
 
-If the CIC endpoint returns the official ZIP, it is saved to `data/raw/` and extracted. If the endpoint returns the CIC form/error HTML instead, manually download the dataset from the official page above and place the ZIP or extracted CSV files in `data/raw/`.
+## Running the Application
 
-## Train
-
-```bash
-python -m src.train
-```
-
-The training pipeline:
-
-1. Discovers CSV files recursively under `data/raw/`.
-2. Extracts ZIP archives if present.
-3. Loads compatible CICIDS2017 CSV files.
-4. Cleans missing, duplicate, empty, invalid, and infinity values.
-5. Converts labels to `NORMAL` and `MALICIOUS`.
-6. Splits train/test with stratification.
-7. Fits preprocessing on training data only.
-8. Performs correlation and Random Forest importance feature selection using training data only.
-9. Trains the final Random Forest.
-10. Saves metrics, plots, selected features, and model artifacts.
-
-## Evaluate Results
-
-Outputs are saved under:
-
-```text
-results/metrics/
-results/figures/
-results/selected_features/
-models/random_forest_cicids2017.joblib
-```
-
-Important files:
-
-- `results/metrics/evaluation_metrics.json`
-- `results/metrics/training_summary.json`
-- `results/metrics/classification_report.csv`
-- `results/metrics/final_feature_importance.csv`
-- `results/figures/confusion_matrix.png`
-- `results/figures/feature_importance.png`
-- `results/selected_features/selected_features.csv`
-
-Metrics are generated only by actual execution on the real dataset.
-
-## Attack-Type Identification
-
-After the existing binary model has been trained, train the separate second-stage classifier:
-
-```bash
-python -m src.train_attack_type
-```
-
-This command preserves the original CICIDS2017 `Label` values, keeps only records that became `MALICIOUS`, and trains a second stratified Random Forest on those original attack labels. It reuses the already fitted binary preprocessing transformer and the same 30 selected features. It does not retrain or overwrite the binary model.
-
-The second-stage artifacts are separate:
-
-- `models/random_forest_attack_type.joblib`
-- `results/metrics/attack_type_training_summary.json`
-- `results/metrics/attack_type_evaluation_metrics.json`
-- `results/metrics/attack_type_classification_report.csv`
-- `results/metrics/attack_type_class_distribution.csv`
-- `results/metrics/attack_type_feature_importance.csv`
-- `results/figures/attack_type_confusion_matrix.png`
-- `results/figures/attack_type_class_distribution.png`
-
-Prediction is two-stage: the existing binary model first returns `NORMAL` or `MALICIOUS`. Only malicious records are sent to the attack-type Random Forest, which returns an original CICIDS2017 attack label such as `DoS Hulk`, `PortScan`, or `DDoS`. Normal records do not receive an attack type.
-
-## Predict New Traffic
-
-```bash
-python -m src.predict path\to\new_traffic.csv
-```
-
-Output is `NORMAL: SAFE TRAFFIC` or `MALICIOUS: Attack Type: <original CICIDS2017 label>` when the second-stage model is available.
-
-## Streamlit App
+Start the Streamlit application from the project root:
 
 ```bash
 streamlit run app/streamlit_app.py
 ```
 
-Upload a CSV containing the same raw feature columns used during training.
+Streamlit will display a local URL in the terminal. Open that URL in your browser to use the application.
 
-## Architecture
+Upload a CSV file containing the expected input feature columns to test the classifier.
 
-```text
-data/
-  raw/
-  processed/
-src/
-  data_loader.py
-  download_dataset.py
-  preprocessing.py
-  feature_selection.py
-  train_attack_type.py
-  train.py
-  evaluate.py
-  predict.py
-  utils.py
-app/
-  streamlit_app.py
-models/
-results/
-  figures/
-  metrics/
-  selected_features/
+## Training the Models
+
+Training requires the official CICIDS2017 dataset under `data/raw/`.
+
+### Train the Binary Classifier
+
+```bash
+python -m src.train
 ```
 
-## Leakage Prevention
+This runs the binary training pipeline and generates the associated model and evaluation artifacts.
 
-- The original label column is removed from input features.
-- Identifier/time fields such as IP addresses, flow IDs, and timestamps are removed when present.
-- Train/test split happens before learned preprocessing and feature selection.
-- Imputation and encoding are fitted using training data only.
-- Correlation filtering and the feature-importance selector use a deterministic stratified sample of 150,000 rows from the training split only. This keeps selection practical on CICIDS2017 while preserving the binary class balance; the final Random Forest is still fitted on all available training rows and evaluated on all held-out test rows. Use `--selection-sample-size` to choose another manageable training-only sample.
-- Test data is used only for final evaluation.
-- Original attack labels are preserved separately for malicious-only attack-type training; the binary model remains unchanged.
+### Train the Attack-Type Classifier
+
+After the binary model and its required preprocessing artifacts have been generated:
+
+```bash
+python -m src.train_attack_type
+```
+
+The attack-type model is trained separately using the original attack labels.
+
+### Run Prediction from the Command Line
+
+```bash
+python -m src.predict path\to\new_traffic.csv
+```
+
+Replace the example path with the location of your input CSV file.
+
+## Results and Visualizations
+
+Generated artifacts are organized under `results/`.
+
+### Figures
+
+- `class_distribution.png` — distribution of binary classes.
+- `correlation_heatmap.png` — correlations among selected numeric features.
+- `feature_importance.png` — feature importance for binary classification.
+- `confusion_matrix.png` — binary classification results.
+- `attack_type_confusion_matrix.png` — attack-type classification results.
+- `attack_type_class_distribution.png` — distribution of attack categories.
+
+### Metrics and Reports
+
+The `results/metrics/` directory contains evaluation metrics, classification reports, training summaries, and feature-importance records.
+
+The `results/selected_features/` directory contains feature-selection outputs and related analysis artifacts.
+
+## Model Artifacts
+
+The repository includes two trained models:
+
+- `models/random_forest_cicids2017.joblib` — binary traffic classification.
+- `models/random_forest_attack_type.joblib` — attack-type classification.
+
+The models were trained on the project's selected CICIDS2017 features. Input compatibility and the expected preprocessing pipeline must be maintained when using the saved artifacts.
+
+## Evaluation Metrics
+
+The project evaluates classification performance using:
+
+- **Accuracy:** Overall proportion of correctly classified records.
+- **Precision:** Proportion of predicted positive cases that are correct.
+- **Recall:** Proportion of actual positive cases correctly identified.
+- **F1-score:** Harmonic mean of precision and recall.
+- **Confusion matrix:** Breakdown of correct and incorrect predictions by class.
+
+For binary evaluation, the positive class is `MALICIOUS`. Attack-type evaluation also reports weighted metrics across the supported attack categories.
 
 ## Limitations
 
-- The project requires real CICIDS2017 CSV data; no metrics are available until the official dataset is supplied.
-- CICIDS2017 is not a native 5G dataset, but it is a standard IDS benchmark suitable for an academic malicious traffic detection pipeline.
-- Random Forest is the only implemented classifier by design.
+- CICIDS2017 is a benchmark dataset and does not directly represent all characteristics of modern 5G traffic.
+- Results depend on the dataset, selected features, and training configuration.
+- High benchmark scores do not guarantee equivalent performance in real-world deployments.
+- The classifier recognizes patterns represented in its training data and may not correctly identify previously unseen attack patterns.
+- SHAP explanations describe model behavior and should not be treated as definitive security evidence.
+- This project is an academic prototype and should not be considered a replacement for a production-grade intrusion detection system.
 
-## Future Improvements
+## Future Enhancements
 
-- Add controlled hyperparameter tuning for Random Forest.
-- Add model card documentation after real training.
-- Validate on newer 5G or IoT network intrusion datasets while keeping CICIDS2017 as the baseline.
+- Evaluate the system using additional 5G, IoT, and modern intrusion detection datasets.
+- Perform controlled hyperparameter tuning and robustness testing.
+- Assess generalization to unseen attack patterns.
+- Optimize inference time and resource usage for deployment.
+- Improve security monitoring and integration with network management systems.
+
+## Conclusion
+
+This project demonstrates a Random Forest-based approach to network traffic classification using CICIDS2017. The two-stage architecture combines binary malicious traffic detection with attack-type identification, while SHAP-based explainability and a Streamlit interface make predictions easier to inspect.
+
+The implementation provides a foundation for further research into machine learning-based intrusion detection and its application to 5G security.
+
+## License
+
+No open-source license has been specified yet. All rights and reuse permissions remain subject to the applicable dataset terms and the repository owner's decisions.
