@@ -243,6 +243,33 @@ Streamlit will display a local URL in the terminal. Open that URL in your browse
 
 Upload a CSV file containing the expected input feature columns to test the classifier.
 
+## Deployment and Hosting Limitations
+
+The application is deployed on Render using its **Free plan** for demonstration purposes. The free hosting environment has limited available memory (512 MB in the instance observed during testing), which can cause the application to exceed its resource limit while loading the trained Random Forest models or executing prediction and SHAP-based explainability operations.
+
+As a result, the online demo may not support every prediction workload reliably. This limitation is related to the available hosting resources and does not, by itself, indicate a problem with the trained models.
+
+**Live Demo:** https://malicious-traffic-detection-5g.onrender.com
+
+### Recommended Testing Method
+
+For complete testing of binary classification, attack-type identification, and SHAP-based explanations, running the application locally is recommended.
+
+1. Clone the GitHub repository.
+2. Install the dependencies using `requirements.txt`.
+3. Ensure both trained model files are present in the `models/` directory.
+4. Start the application:
+
+```bash
+streamlit run app/streamlit_app.py
+```
+
+5. Open the local URL provided in the terminal and upload a compatible traffic CSV file.
+
+Local execution avoids Render's specific 512 MB hosting limit.
+
+The online deployment is provided as a demonstration endpoint, while local execution is recommended for reliable functional testing.
+
 ## Training the Models
 
 Training requires the official CICIDS2017 dataset under `data/raw/`.
