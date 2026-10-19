@@ -340,14 +340,6 @@ The project evaluates classification performance using:
 
 For binary evaluation, the positive class is `MALICIOUS`. Attack-type evaluation also reports weighted metrics across the supported attack categories.
 
-## Limitations
-
-- CICIDS2017 is a benchmark dataset and does not directly represent all characteristics of modern 5G traffic.
-- Results depend on the dataset, selected features, and training configuration.
-- High benchmark scores do not guarantee equivalent performance in real-world deployments.
-- The classifier recognizes patterns represented in its training data and may not correctly identify previously unseen attack patterns.
-- SHAP explanations describe model behavior and should not be treated as definitive security evidence.
-- This project is an academic prototype and should not be considered a replacement for a production-grade intrusion detection system.
 
 ## Future Enhancements
 
