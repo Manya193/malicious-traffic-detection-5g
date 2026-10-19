@@ -336,6 +336,4 @@ This project demonstrates a Random Forest-based approach to network traffic clas
 
 The implementation provides a foundation for further research into machine learning-based intrusion detection and its application to 5G security.
 
-## License
 
-No open-source license has been specified yet. All rights and reuse permissions remain subject to the applicable dataset terms and the repository owner's decisions.
